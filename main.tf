@@ -32,7 +32,7 @@ resource "aws_route" "public_route" {
 resource "aws_subnet" "subnet_private" {
     vpc_id = "${aws_vpc.vpc.id}"
     count = "${length(data.aws_availability_zones.available.names)}"
-    cidr_block = "${cidrsubnet(var.vpc_cidr, 4, count.index)}"
+    cidr_block = "${cidrsubnet(var.vpc_cidr, 4, "${count.index + length(data.aws_availability_zones.available.names)}")}"
     availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
     map_public_ip_on_launch = false
     tags {
