@@ -66,3 +66,9 @@ resource "aws_route_table_association" "private" {
     subnet_id = "${element(aws_subnet.subnet_private.*.id, count.index)}"
     route_table_id = "${aws_route_table.private.id}"
 }
+
+resource "null_resource" "tag_main_rt" {
+  provisioner "local-exec" {
+    command = "aws ec2 create-tags --resources ${aws_vpc.vpc.main_route_table_id} --tags Key=Name,Value=\"${var.vpc_tag} Public\" --profile ${var.profile} --region ${var.region}"
+  }
+}
